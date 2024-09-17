@@ -1488,7 +1488,7 @@ def handle_postback(event):
         file_path = './sleep.csv'
         df = pd.read_csv(file_path, encoding='big5')
 
-        font_prop = FontProperties(fname='./NotoSansTC-VariableFont_wght.ttf', size=12)
+        font_prop = FontProperties(fname='./NotoSansTC-VariableFont_wght.ttf')
         
         # 將 StartTime 和 EndTime 轉換為 datetime 格式
         df['StartTime'] = pd.to_datetime(df['StartTime'])
