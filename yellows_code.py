@@ -1651,12 +1651,12 @@ def handle_postback(event):
         ax.set_xticks(ticks)
 
         # 添加標籤和標題
-        ax.set_xlabel('時間')
+        ax.set_xlabel('時間', fontproperties=font_prop)
         ax.set_yticks([])
         month = datetime.strptime(start_date, '%Y-%m-%d').month
         day = datetime.strptime(start_date, '%Y-%m-%d').day
         title_date = f'{month}月{day}日 睡眠'
-        ax.set_title(title_date)
+        ax.set_title(title_date, fontproperties=font_prop)
 
         # 將'持續時間'列轉換為數字
         daily_sleep_df['Duration'] = pd.to_numeric(daily_sleep_df['Duration'], errors='coerce')
@@ -1717,11 +1717,11 @@ def handle_postback(event):
 
         if(wake_count > 0):
             summary_text5 = f'轉醒次數：{wake_count}次'
-        plt.figtext(0.07, 0.45, summary_text1, ha='left', fontsize=12)
-        plt.figtext(0.07, 0.4, summary_text5, ha='left', fontsize=12)
-        plt.figtext(0.07, 0.3, summary_text2, ha='left', fontsize=12)
-        plt.figtext(0.07, 0.25, summary_text3, ha='left', fontsize=12)
-        plt.figtext(0.07, 0.2, summary_text4, ha='left', fontsize=12)
+        plt.figtext(0.07, 0.45, summary_text1, ha='left', fontsize=12, fontproperties=font_prop)
+        plt.figtext(0.07, 0.4, summary_text5, ha='left', fontsize=12, fontproperties=font_prop)
+        plt.figtext(0.07, 0.3, summary_text2, ha='left', fontsize=12, fontproperties=font_prop)
+        plt.figtext(0.07, 0.25, summary_text3, ha='left', fontsize=12, fontproperties=font_prop)
+        plt.figtext(0.07, 0.2, summary_text4, ha='left', fontsize=12, fontproperties=font_prop)
 
         # 添加圖例，順序為淺眠、深眠、醒
         legend_labels = ['淺眠', '深眠', '醒']
