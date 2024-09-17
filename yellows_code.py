@@ -1310,6 +1310,8 @@ def handle_postback(event):
         df_hr = df.resample('1h').mean()
         df_yesterday = df_hr.loc[start_date]
 
+        font_prop = FontProperties(fname='./NotoSansTC-VariableFont_wght.ttf', size=12)
+
         bins = [0, 23, 27, 31, 35, 100] 
         labels = [0, 1, 2, 3, 4]
 
@@ -1356,7 +1358,7 @@ def handle_postback(event):
             for k, cell in mpl_table._cells.items():
                 cell.set_edgecolor(edge_color)
                 if k[0] == 0:
-                    cell.set_text_props(weight='bold', color='w')
+                    cell.set_text_props(weight='bold', color='w', fontproperties=font_prop)
                     cell.set_facecolor(header_color)
                 else:
                     if k[1] == 1:  # Only apply color to the 'Data' column
@@ -1364,7 +1366,7 @@ def handle_postback(event):
                         cell_value = float(cell_value)
                         color = plt.cm.Reds(cell_value / max_data_value)
                         cell.set_facecolor(color)
-                        cell.set_text_props(color='black')
+                        cell.set_text_props(color='black', fontproperties=font_prop)
                     else:
                         cell.set_facecolor(row_colors[k[0] % len(row_colors)])
             
@@ -1376,8 +1378,8 @@ def handle_postback(event):
             month=date_object.month
             day=date_object.day
             # 在左上角加上標題
-            plt.figtext(0.15, 0.8,f'{month}月{day}日疲勞指數',fontsize=13, weight='bold', ha='left')
-            plt.figtext(0.5, 0.76, f'疲勞警示:{FatigueAlert}次', fontsize=12, ha='center')
+            plt.figtext(0.15, 0.8,f'{month}月{day}日疲勞指數',fontsize=13, weight='bold', ha='left', fontproperties=font_prop)
+            plt.figtext(0.5, 0.76, f'疲勞警示:{FatigueAlert}次', fontsize=12, ha='center', fontproperties=font_prop)
             # 加上圖例
             legend_labels = [
                 "nan: 未測得數據",
@@ -1394,7 +1396,7 @@ def handle_postback(event):
 
             # 調整圖例大小、位置
             plt.subplots_adjust(bottom=0.4)
-            plt.legend(handles=patches, loc='upper right', bbox_to_anchor=(1.0, 1.3), fontsize=8)
+            plt.legend(handles=patches, loc='upper right', bbox_to_anchor=(1.0, 1.3), fontsize=8, prop=font_prop)
                 
             plt.savefig("colored_table.png", dpi=200, bbox_inches='tight')
             im = pyimgur.Imgur(CLIENT_ID)
