@@ -1739,6 +1739,7 @@ def handle_postback(event):
         colors = ['#60b8b3', '#437e7b', '#FF8040']
         pie_ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=colors)
         # pie_ax.set_title('睡眠狀態')
+        plt.setp(texts, fontproperties=font_prop)
 
         # 顯示圖表
         # plt.xticks(rotation=45)
