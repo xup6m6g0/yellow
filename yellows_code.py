@@ -1737,7 +1737,7 @@ def handle_postback(event):
         labels = ['淺眠', '深眠', '醒']
         sizes = [shallow_sleep_duration, deep_sleep_duration, awake_duration]
         colors = ['#60b8b3', '#437e7b', '#FF8040']
-        pie_ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=colors)
+        pie_ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=colors, prop=font_prop)
         # pie_ax.set_title('睡眠狀態')
 
         # 顯示圖表
