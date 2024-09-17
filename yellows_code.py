@@ -875,6 +875,9 @@ def handle_postback(event):
         # start_date = '2024-05-22'
         yesterday = (datetime.strptime(start_date, '%Y-%m-%d') - timedelta(days=1)).strftime('%Y-%m-%d')
 
+        font_prop = FontProperties(fname='./NotoSansTC-VariableFont_wght.ttf', size=12)
+
+
         df['時間'] = pd.to_datetime(df['時間'])
         dfArrhythmia['時間'] = pd.to_datetime(dfArrhythmia['時間'])
         df.set_index('時間', inplace=True)
@@ -915,7 +918,7 @@ def handle_postback(event):
         df_hr_interpolate = df_week.resample('15min').mean().interpolate()
 
         # plt.style.use('seaborn-v0_8')
-        matplotlib.rc('font', family='Microsoft JhengHei')
+        #matplotlib.rc('font', family='Microsoft JhengHei')
 
         # 創建圖表
         fig, ax1 = plt.subplots(figsize=(10, 6))
@@ -936,15 +939,15 @@ def handle_postback(event):
         title_date = f'{month}月{day}日 心率'
 
 
-        ax1.set_title(title_date)
-        ax1.set_xlabel('時間')
-        ax1.set_ylabel('心率')
+        ax1.set_title(title_date, fontproperties=font_prop)
+        ax1.set_xlabel('時間', fontproperties=font_prop)
+        ax1.set_ylabel('心率', fontproperties=font_prop)
         # ax1.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
         # ax1.xaxis.set_major_locator(mdates.HourLocator(interval=1))  # 每小時一個標記
         ax1.xaxis.set_major_locator(mdates.HourLocator(interval=2))  # 每2小時顯示一次標記
         ax1.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))  # 格式化為 時:分 的形式
         ax1.set_xlim([datetime.strptime(start_date, '%Y-%m-%d'), datetime.strptime(start_date, '%Y-%m-%d') + timedelta(days=1)])  # 設置x軸顯示範圍為00:00到24:00
-        ax1.legend()
+        ax1.legend(prop=font_prop)
 
         # 在圖表上添加文本
         summary_text1 = f"今日心律不整警示：{arrhythmia_alert_count}次"
@@ -955,10 +958,10 @@ def handle_postback(event):
         summary_text4 = f"輕度運動心率(94~113bpm)比例：{lowExerPercentage}%"
         summary_text5 = f"中、重度運動心率(>114bpm)比例：{highExerPercentage}%"
 
-        fig.text(0.07, 0.18, summary_text1, ha='left', fontsize=12)
-        fig.text(0.47, 0.15, summary_text3, ha='left', fontsize=12)
-        fig.text(0.47, 0.1, summary_text4, ha='left', fontsize=12)
-        fig.text(0.47, 0.05, summary_text5, ha='left', fontsize=12)
+        fig.text(0.07, 0.18, summary_text1, ha='left', fontsize=12, fontproperties=font_prop)
+        fig.text(0.47, 0.15, summary_text3, ha='left', fontsize=12, fontproperties=font_prop)
+        fig.text(0.47, 0.1, summary_text4, ha='left', fontsize=12, fontproperties=font_prop)
+        fig.text(0.47, 0.05, summary_text5, ha='left', fontsize=12, fontproperties=font_prop)
 
         # 添加心率區間線條
         left, bottom, width, height = 0.04, 0, 0.4, 0.15
@@ -970,9 +973,9 @@ def handle_postback(event):
         ax2.plot([2, 3], [0, 0], color='lightcoral', linewidth=15)
 
         # 顯示心率區間標記
-        ax2.text(0.5, 0.02, '偏慢', horizontalalignment='center', fontsize=12, color='blue')
-        ax2.text(1.5, 0.02, '心率正常', horizontalalignment='center', fontsize=12, color='green')
-        ax2.text(2.5, 0.02, '偏快', horizontalalignment='center', fontsize=12, color='red')
+        ax2.text(0.5, 0.02, '偏慢', horizontalalignment='center', fontsize=12, color='blue', fontproperties=font_prop)
+        ax2.text(1.5, 0.02, '心率正常', horizontalalignment='center', fontsize=12, color='green', fontproperties=font_prop)
+        ax2.text(2.5, 0.02, '偏快', horizontalalignment='center', fontsize=12, color='red', fontproperties=font_prop)
 
         # 計算 avgHeartrate 在哪段線上的位置
         if avgHeartrate <= 60:
@@ -987,7 +990,7 @@ def handle_postback(event):
 
         # 標記 avgHeartrate 的位置
         ax2.plot(avg_x, 0, marker='o', markersize=10, color=color)
-        ax2.text(avg_x, 0.05, summary_text2, horizontalalignment='center', fontsize=12, color=color)
+        ax2.text(avg_x, 0.05, summary_text2, horizontalalignment='center', fontsize=12, color=color, fontproperties=font_prop)
 
         # 隱藏坐標軸
         ax2.axis('off')
@@ -1002,7 +1005,7 @@ def handle_postback(event):
         pie_ax.pie([restPercentage, lowExerPercentage, highExerPercentage], colors = pie_colors, autopct=autopct_format, startangle=180 )
 
         handles = [mpatches.Patch(color=color, label=label) for label, color in zip(['休息', '輕度運動', '中、重度運動'], pie_colors)]
-        fig.legend(handles= handles, loc='lower right',frameon = True, bbox_to_anchor=(1, 0), edgecolor='gray', facecolor='white', framealpha=1)
+        fig.legend(handles= handles, loc='lower right',frameon = True, bbox_to_anchor=(1, 0), edgecolor='gray', facecolor='white', framealpha=1,prop=font_prop)
 
         plt.tight_layout()
         plt.subplots_adjust(bottom=0.3)
