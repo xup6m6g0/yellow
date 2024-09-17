@@ -1310,7 +1310,7 @@ def handle_postback(event):
         df_hr = df.resample('1h').mean()
         df_yesterday = df_hr.loc[start_date]
 
-        font_prop = FontProperties(fname='./NotoSansTC-VariableFont_wght.ttf', size=9)
+        font_prop = FontProperties(fname='./NotoSansTC-VariableFont_wght.ttf', size=8)
 
         bins = [0, 23, 27, 31, 35, 100] 
         labels = [0, 1, 2, 3, 4]
