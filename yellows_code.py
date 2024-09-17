@@ -25,7 +25,8 @@ from matplotlib import rcParams
 from threading import Lock
 from apscheduler.schedulers.background import BackgroundScheduler
 from linebot.models import TextSendMessage, MessageEvent, TextMessage,DatetimePickerAction, TemplateSendMessage, ButtonsTemplate,FlexSendMessage
-
+import matplotlib.font_manager as fm
+from matplotlib.font_manager import FontProperties
 
 CLIENT_ID = "122aba7e3e3f13a"
 PATH = 'report2.png'
@@ -1143,6 +1144,8 @@ def handle_postback(event):
         # specific_time = '2024-05-27'
         df_yesterday = df.loc[start_date]
 
+        font_prop = FontProperties(fname='./NotoSansTC-VariableFont_wght.ttf', size=12)
+
         #抓久坐警示csv
         datawarning = pd.read_csv('./warning.csv')
         df2 = pd.DataFrame(datawarning)
@@ -1159,13 +1162,13 @@ def handle_postback(event):
         df_hourly = df_yesterday.resample('h').sum()
         df_yesterday_hourly = df_yesterday.resample('h').sum()
 
-        matplotlib.rc('font', family='Microsoft JhengHei')
+        #matplotlib.rc('font', family='Microsoft JhengHei')
         plt.figure(figsize=(10, 6))
         bars = plt.bar(df_hourly.index,df_hourly['Step'],width=0.03, color='#60b8b3')
         #print(df_hourly['Step'])
 
-        plt.xlabel('時間') 
-        plt.ylabel('步數')
+        plt.xlabel('時間', fontproperties=font_prop)
+        plt.ylabel('步數', fontproperties=font_prop)
 
         #顯示總和步數
         total_steps = df_hourly['Step'].sum()
@@ -1179,7 +1182,7 @@ def handle_postback(event):
         title_date = f'{month}月{day}日 活動'
         # plt.title(f'昨日活動 (總步數: {total_steps:.0f})')
         # Set the title
-        plt.title(title_date)
+        plt.title(title_date, fontproperties=font_prop)
 
         # 自訂標籤：只顯示偶數小時的標籤
         plt.gca().xaxis.set_major_locator(mdates.HourLocator(interval=2))
@@ -1187,7 +1190,7 @@ def handle_postback(event):
 
         for bar in bars:
             height = bar.get_height()
-            plt.text(bar.get_x() + bar.get_width() / 2, height, f'{height:.0f}', ha='center', va='bottom', fontsize=10)
+            plt.text(bar.get_x() + bar.get_width() / 2, height, f'{height:.0f}', ha='center', va='bottom', fontsize=10, fontproperties=font_prop)
             
         plt.tight_layout() 
 
@@ -1204,9 +1207,9 @@ def handle_postback(event):
             summary_text3 = '恭喜你！你已經達成了8000步的目標。'
         else:
             summary_text3 = f'還差 {8000 - total_steps} 步就能達成目標8000步，繼續加油！'
-        plt.figtext(0.07, 0.15, summary_text1, ha='left', fontsize=12)
-        plt.figtext(0.07, 0.1, summary_text2, ha='left', fontsize=12)
-        plt.figtext(0.07, 0.05, summary_text3, ha='left', fontsize=12)
+        plt.figtext(0.07, 0.15, summary_text1, ha='left', fontsize=12, fontproperties=font_prop)
+        plt.figtext(0.07, 0.1, summary_text2, ha='left', fontsize=12, fontproperties=font_prop)
+        plt.figtext(0.07, 0.05, summary_text3, ha='left', fontsize=12, fontproperties=font_prop)
         plt.subplots_adjust(bottom=0.3)
 
         # output_path_activt_day="C:/Users/user/Desktop/image/report2.png"
