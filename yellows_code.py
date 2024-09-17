@@ -1737,13 +1737,8 @@ def handle_postback(event):
         labels = ['淺眠', '深眠', '醒']
         sizes = [shallow_sleep_duration, deep_sleep_duration, awake_duration]
         colors = ['#60b8b3', '#437e7b', '#FF8040']
-        
-        # 應用 font_prop 到圓餅圖的標籤
-        texts = pie_ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=colors)
-        for text in texts[1]:  # texts[1] 包含標籤
-        text.set_fontproperties(font_prop)
-        for text in texts[2]:  # texts[2] 包含百分比
-        text.set_fontproperties(font_prop)
+        pie_ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=colors)
+        # pie_ax.set_title('睡眠狀態')
         
         # 顯示圖表
         # plt.xticks(rotation=45)
