@@ -1258,7 +1258,7 @@ def handle_postback(event):
         avgStep_lastweek = int(np.average(df_prev_week['Step']))
 
 
-        matplotlib.rc('font', family='Microsoft JhengHei')
+        #matplotlib.rc('font', family='Microsoft JhengHei')
         plt.figure(figsize=(10, 6))
         bars = plt.bar(df_daliy.index, df_daliy['Step'], width=0.8, align='center', color='#60b8b3')
 
@@ -1339,7 +1339,7 @@ def handle_postback(event):
         df2_yesterday = df2.loc[start_date]
         FatigueAlert = int(df2_yesterday['FatigueAlert'])
 
-        rcParams['font.family'] = 'Microsoft JhengHei'
+        #rcParams['font.family'] = 'Microsoft JhengHei'
 
         def render_mpl_table(data, col_width=2.0, row_height=0.5, font_size=12,
                             header_color='#40466e', row_colors=['#f1f1f2', 'w'], edge_color='w',
@@ -1855,7 +1855,7 @@ def handle_postback(event):
         }
 
         fig, ax = plt.subplots(figsize=(10, 6))
-        rcParams['font.sans-serif'] = ['Microsoft JhengHei']
+        #rcParams['font.sans-serif'] = ['Microsoft JhengHei']
         rcParams['axes.unicode_minus'] = False
         # 畫圖
         for i, date in enumerate(unique_dates):
