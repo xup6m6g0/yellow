@@ -1036,6 +1036,8 @@ def handle_postback(event):
         df.set_index('時間', inplace=True)
         df_week = df.loc[start_date:end_date]
 
+        font_prop = FontProperties(fname='./NotoSansTC-VariableFont_wght.ttf', size=12)###
+
         # 使用 resample 進行重採樣，使用均值
         df_hr = df_week.resample('h').mean()
         #用插值法將有空缺的數據補上
@@ -1055,14 +1057,14 @@ def handle_postback(event):
         highExerPercentage = round((highExer / total_count) * 100, 1)
 
         # plt.style.use('seaborn-v0_8')
-        matplotlib.rc('font', family='Microsoft JhengHei')
+        #matplotlib.rc('font', family='Microsoft JhengHei')
         fig, ax1 = plt.subplots(figsize=(10, 6))
         ax1.plot(df_hr_interpolate.index,df_hr_interpolate['量測值'],label='缺失數據推測值', linestyle='--', color = "#D9006C")
         ax1.plot(df_hr.index,df_hr['量測值'], label='平均心率(小時)')
-        ax1.set_title('心率周報表')
-        ax1.set_xlabel('日期時間')
-        ax1.set_ylabel('心率')
-        ax1.legend()
+        ax1.set_title('心率周報表', fontproperties=font_prop)
+        ax1.set_xlabel('日期時間', fontproperties=font_prop)
+        ax1.set_ylabel('心率', fontproperties=font_prop)
+        ax1.legend(prop=font_prop)
 
         # 在圖表上添加文本
         summary_text1 = "本周心律不整警示：3次"
@@ -1086,9 +1088,9 @@ def handle_postback(event):
         ax2.plot([2, 3], [0, 0], color='lightcoral', linewidth=15)
 
         # 顯示心率區間標記
-        ax2.text(0.5, 0.02, '偏慢', horizontalalignment='center', fontsize=12, color='blue')
-        ax2.text(1.5, 0.02, '心率正常', horizontalalignment='center', fontsize=12, color='green')
-        ax2.text(2.5, 0.02, '偏快', horizontalalignment='center', fontsize=12, color='red')
+        ax2.text(0.5, 0.02, '偏慢', horizontalalignment='center', fontsize=12, color='blue', fontproperties=font_prop)
+        ax2.text(1.5, 0.02, '心率正常', horizontalalignment='center', fontsize=12, color='green', fontproperties=font_prop)
+        ax2.text(2.5, 0.02, '偏快', horizontalalignment='center', fontsize=12, color='red', fontproperties=font_prop)
 
         # 計算 avgHeartrate 在哪段線上的位置
         if avgHeartrate <= 60:
@@ -1103,7 +1105,7 @@ def handle_postback(event):
 
         # 標記 avgHeartrate 的位置
         ax2.plot(avg_x, 0, marker='o', markersize=10, color=color)
-        ax2.text(avg_x, 0.05, summary_text2, horizontalalignment='center', fontsize=12, color=color)
+        ax2.text(avg_x, 0.05, summary_text2, horizontalalignment='center', fontsize=12, color=color, fontproperties=font_prop)
 
         # 隱藏坐標軸
         ax2.axis('off')
@@ -1118,7 +1120,7 @@ def handle_postback(event):
         pie_ax.pie([restPercentage, lowExerPercentage, highExerPercentage], colors = pie_colors, autopct=autopct_format, startangle=180 )
 
         handles = [mpatches.Patch(color=color, label=label) for label, color in zip(['休息', '輕度運動', '中、重度運動'], pie_colors)]
-        fig.legend(handles= handles, loc='lower right',frameon = True, bbox_to_anchor=(1, 0), edgecolor='gray', facecolor='white', framealpha=1)
+        fig.legend(handles= handles, loc='lower right',frameon = True, bbox_to_anchor=(1, 0), edgecolor='gray', facecolor='white', framealpha=1, prop=font_prop)
 
         #plt.grid(True)
 
