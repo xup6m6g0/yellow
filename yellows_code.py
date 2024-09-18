@@ -1073,11 +1073,11 @@ def handle_postback(event):
         summary_text4 = f"輕度運動心率(94~113bpm)比例：{lowExerPercentage}%"
         summary_text5 = f"中、重度運動心率(>114bpm)比例：{highExerPercentage}%"
 
-        fig.text(0.07, 0.18, summary_text1, ha='left', fontsize=12)
-        #fig.text(0.07, 0.15, summary_text2, ha='left', fontsize=12)
-        fig.text(0.47, 0.15, summary_text3, ha='left', fontsize=12)
-        fig.text(0.47, 0.1, summary_text4, ha='left', fontsize=12)
-        fig.text(0.47, 0.05, summary_text5, ha='left', fontsize=12)
+        fig.text(0.07, 0.18, summary_text1, ha='left', fontsize=12, fontproperties=font_prop)
+        #fig.text(0.07, 0.15, summary_text2, ha='left', fontsize=12, fontproperties=font_prop)
+        fig.text(0.47, 0.15, summary_text3, ha='left', fontsize=12, fontproperties=font_prop)
+        fig.text(0.47, 0.1, summary_text4, ha='left', fontsize=12, fontproperties=font_prop)
+        fig.text(0.47, 0.05, summary_text5, ha='left', fontsize=12, fontproperties=font_prop)
         # 添加心率區間線條
         left, bottom, width, height = 0.04, 0, 0.4, 0.15
         ax2 = fig.add_axes([left, bottom, width, height])
