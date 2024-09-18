@@ -1784,6 +1784,9 @@ def handle_postback(event):
         # start_date = pd.to_datetime('2024-05-28')
         end_date = pd.to_datetime(start_date) + pd.Timedelta(days=6)
 
+        font_prop = FontProperties(fname='./NotoSansTC-VariableFont_wght.ttf', size=12)
+
+
         # 定義一個函數來拆分跨天的資料
         def split_overnight_rows(row):
             start = datetime.strptime(row['StartTime'], '%Y/%m/%d %H:%M')
@@ -1879,9 +1882,9 @@ def handle_postback(event):
         ax.legend(handles, labels, title="State", bbox_to_anchor=(1, 1), loc='upper left')
 
         # 添加標籤和標題
-        ax.set_xlabel('時間')
-        ax.set_ylabel('日期')
-        ax.set_title('睡眠周報表')
+        ax.set_xlabel('時間', fontproperties=font_prop)
+        ax.set_ylabel('日期', fontproperties=font_prop)
+        ax.set_title('睡眠周報表', fontproperties=font_prop)
         ax.grid(True)
 
         # 將'持續時間'列轉換為數字
@@ -1935,11 +1938,11 @@ def handle_postback(event):
         #     summary_text4 = f'平均轉醒時長:{awake_duration%60}分'
         # else:
         #     summary_text4 = f'平均轉醒時長:{awake_duration // 60}小時{awake_duration % 60}分'    
-        plt.figtext(0.07, 0.35, summary_text1, ha='left', fontsize=12)
-        plt.figtext(0.07, 0.3, summary_text2, ha='left', fontsize=12)
-        plt.figtext(0.07, 0.25, summary_text3, ha='left', fontsize=12)
+        plt.figtext(0.07, 0.35, summary_text1, ha='left', fontsize=12, fontproperties=font_prop)
+        plt.figtext(0.07, 0.3, summary_text2, ha='left', fontsize=12, fontproperties=font_prop)
+        plt.figtext(0.07, 0.25, summary_text3, ha='left', fontsize=12, fontproperties=font_prop)
         #plt.figtext(0.07, 0.2, summary_text4, ha='left', fontsize=12)
-        plt.figtext(0.07, 0.2, summary_text5, ha='left', fontsize=12)
+        plt.figtext(0.07, 0.2, summary_text5, ha='left', fontsize=12, fontproperties=font_prop)
 
         # 添加圖例，順序為淺眠、深眠、醒
         #legend_labels = ['淺眠', '深眠', '醒']
