@@ -1425,9 +1425,13 @@ def handle_postback(event):
         # start_date = '2024-05-21'
         df.set_index('datetime', inplace=True)
         df.sort_index(inplace=True)
+
         end_date = (datetime.strptime(start_date, '%Y-%m-%d') + timedelta(days=6)).strftime('%Y-%m-%d')
         df = df.loc[start_date:end_date]
-        rcParams['font.family'] = 'Microsoft JhengHei'
+
+        font_prop = FontProperties(fname='./NotoSansTC-VariableFont_wght.ttf', size=12)
+
+        #rcParams['font.family'] = 'Microsoft JhengHei'
         # 以一天為間隔重新採樣數據，分別計算最大值和平均值
         sampled_max_df = df.resample('1D').max()
         sampled_mean_df = df.resample('1D').mean()
@@ -1466,12 +1470,12 @@ def handle_postback(event):
         plt.ylim(0, 50)
         plt.yticks(np.arange(0, 51, 5))
 
-        plt.xlabel('日期')
-        plt.ylabel('疲勞指數')
-        plt.title('疲勞周報表')
-        plt.xticks(x, sampled_max_df.index.strftime('%Y-%m-%d'))
+        plt.xlabel('日期', fontproperties=font_prop)
+        plt.ylabel('疲勞指數', fontproperties=font_prop)
+        plt.title('疲勞周報表', fontproperties=font_prop)
+        plt.xticks(x, sampled_max_df.index.strftime('%Y-%m-%d'), fontproperties=font_prop)
 
-        plt.legend()
+        plt.legend(prop=font_prop)
         plt.grid(axis='y')
         plt.savefig("colored_tableweek.png", bbox_inches='tight')
         # plt.savefig("colored_table.png")
