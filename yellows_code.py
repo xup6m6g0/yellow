@@ -34,7 +34,7 @@ gettime = "08:00" #先定義一個初始值
 
 app = Flask(__name__)
 
-line_bot_api = LineBotApi("+vszRtjsTxuPM6653PLxHCoGzgbRMKVkTOd8XwdbIlpQ1cqv8LQ3z2F5C2Zdi2hMvWomMnloLp8/40rNFdCQkm4f6v1kte5s1+76wS+9kQ+M1rtvBVjujh12WpDB1Qc9Z/2NpB+NX5D3THH76HDAYwdB04t89/1O/w1cDnyilFU=")
+line_bot_api = LineBotApi("rA4c99ztAvij6tW6HId9zkoMHnyHmSi0E5+fI9zpKBVCmPSzJQMKoYxEwDocI03OvWomMnloLp8/40rNFdCQkm4f6v1kte5s1+76wS+9kQ/4vzey+VrrJk2wzErS2bl61CjdiqWQpss4rDqJbgrOyQdB04t89/1O/w1cDnyilFU=")
 handler = WebhookHandler("9a31037c985e085e319ec091700885c8")
 
 @ app.route("/callback", methods=['POST'])
