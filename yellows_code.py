@@ -1240,6 +1240,8 @@ def handle_postback(event):
         df['ActivityDate'] = pd.to_datetime(df['ActivityDate'])
         df.set_index('ActivityDate', inplace=True)
 
+        font_prop = FontProperties(fname='./NotoSansTC-VariableFont_wght.ttf', size=12)###
+
         end_date = (datetime.strptime(start_date, '%Y-%m-%d') + timedelta(days=6)).strftime('%Y-%m-%d')
         df_week = df.loc[start_date:end_date]
 
@@ -1260,9 +1262,9 @@ def handle_postback(event):
         plt.figure(figsize=(10, 6))
         bars = plt.bar(df_daliy.index, df_daliy['Step'], width=0.8, align='center', color='#60b8b3')
 
-        plt.title('活動周報表')
-        plt.xlabel('日期')
-        plt.ylabel('步數')
+        plt.title('活動周報表', fontproperties=font_prop)
+        plt.xlabel('日期', fontproperties=font_prop)
+        plt.ylabel('步數', fontproperties=font_prop)
 
         # Calculate and plot the average step line
         avgStep = int(np.average(df_daliy['Step']))
@@ -1270,12 +1272,12 @@ def handle_postback(event):
 
         # Add text with a white background behind it
         plt.text(df_daliy.index[-1], avgStep, f' 平均值: {avgStep}', color='black', va='bottom', ha='left', fontsize=12,
-                bbox=dict(facecolor='white', edgecolor='none', alpha=0.8))
+                bbox=dict(facecolor='white', edgecolor='none', alpha=0.8), fontproperties=font_prop)
 
         # Add bar labels
         for bar in bars:
             height = bar.get_height()
-            plt.text(bar.get_x() + bar.get_width() / 2, height, f'{height:.0f}', ha='center', va='bottom', fontsize=10)
+            plt.text(bar.get_x() + bar.get_width() / 2, height, f'{height:.0f}', ha='center', va='bottom', fontsize=10, fontproperties=font_prop)
 
         summary_text1 = ''
         avgStepDif = avgStep - avgStep_lastweek
@@ -1283,7 +1285,7 @@ def handle_postback(event):
             summary_text1 = f"平均步數比上禮拜多了{avgStepDif}步，繼續保持!"
         elif avgStepDif <= 0:
             summary_text1 = f"平均步數比上禮拜少了{-avgStepDif}步，動起來吧！健康生活從多走一步開始。"
-        plt.figtext(0.07, 0.15, summary_text1, ha='left', fontsize=12)
+        plt.figtext(0.07, 0.15, summary_text1, ha='left', fontsize=12, fontproperties=font_prop)
         plt.tight_layout()
         plt.subplots_adjust(bottom=0.3)
         # plt.grid(True)
