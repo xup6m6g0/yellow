@@ -1960,7 +1960,7 @@ def handle_postback(event):
         #colors = ['#cadff0', '#2050bc', '#fd7706']
         # colors = ['#cadff0', '#2050bc']
         colors = ['#60b8b3', '#437e7b']
-        pie_ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=colors, prop=font_prop)
+        pie_ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=colors)
         # pie_ax.set_title('睡眠狀態', y=-0.1)
 
 
