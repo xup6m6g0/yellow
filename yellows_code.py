@@ -617,15 +617,15 @@ def send_5000_steps_badge(event):
                     action=MessageAction(label="5000步 1天", text="查看5000步勳章 連續1天")
                 ),
                 ImageCarouselColumn(
-                    image_url="https://i.imgur.com/GmnnrJN.png",
+                    image_url="https://i.imgur.com/WgUoCPR.jpeg",
                     action=MessageAction(label="5000步 7天", text="查看5000步勳章 連續7天")
                 ),
                 ImageCarouselColumn(
-                    image_url="https://i.imgur.com/GmnnrJN.png",
+                    image_url="https://i.imgur.com/m2hIDkL.jpeg",
                     action=MessageAction(label="5000步 14天", text="查看5000步勳章 連續14天")
                 ),
                 ImageCarouselColumn(
-                    image_url="https://i.imgur.com/GmnnrJN.png",
+                    image_url="https://i.imgur.com/aV2wbmb.jpeg",
                     action=MessageAction(label="5000步 30天", text="查看5000步勳章 連續30天")
                 )
             ]
@@ -642,15 +642,15 @@ def send_8000_steps_badge(event):
         image_carousel_template = ImageCarouselTemplate(
             columns=[
                 ImageCarouselColumn(
-                    image_url="https://i.imgur.com/GmnnrJN.png",
+                    image_url="https://i.imgur.com/iOX39Qp.jpeg",
                     action=MessageAction(label="8000步 1天", text="查看8000步勳章 連續1天")
                 ),
                 ImageCarouselColumn(
-                    image_url="https://i.imgur.com/GmnnrJN.png",
+                    image_url="https://i.imgur.com/OmJpG0F.jpeg",
                     action=MessageAction(label="8000步 7天", text="查看8000步勳章 連續7天")
                 ),
                 ImageCarouselColumn(
-                    image_url="https://i.imgur.com/GmnnrJN.png",
+                    image_url="https://i.imgur.com/YvtjqcY.jpeg",
                     action=MessageAction(label="8000步 14天", text="查看8000步勳章 連續14天")
                 )
             ]
@@ -667,11 +667,11 @@ def send_10000_steps_badge(event):
         image_carousel_template = ImageCarouselTemplate(
             columns=[
                 ImageCarouselColumn(
-                    image_url="https://i.imgur.com/GmnnrJN.png",
+                    image_url="https://i.imgur.com/6PV8bUe.jpeg",
                     action=MessageAction(label="10000步 1天", text="查看10000步勳章 連續1天")
                 ),
                 ImageCarouselColumn(
-                    image_url="https://i.imgur.com/GmnnrJN.png",
+                    image_url="https://i.imgur.com/VZI6vus.jpeg",
                     action=MessageAction(label="10000步 7天", text="查看10000步勳章 連續7天")
                 )
             ]
@@ -704,15 +704,15 @@ def check_and_send_badges():
 
         # 定義不同天數和步數的勳章圖片
         badge_images = {
-            (5000, 30): 'https://i.imgur.com/GmnnrJN.png',
-            (5000, 14): 'https://i.imgur.com/GmnnrJN.png',
-            (5000, 7): 'https://i.imgur.com/GmnnrJN.png',
+            (5000, 30): 'https://i.imgur.com/aV2wbmb.jpeg',
+            (5000, 14): 'https://i.imgur.com/m2hIDkL.jpeg',
+            (5000, 7): 'https://i.imgur.com/WgUoCPR.jpeg',
             (8000, 30): 'https://i.imgur.com/GmnnrJN.png',
-            (8000, 14): 'https://i.imgur.com/GmnnrJN.png',
-            (8000, 7): 'https://i.imgur.com/GmnnrJN.png',
+            (8000, 14): 'https://i.imgur.com/YvtjqcY.jpeg',
+            (8000, 7): 'https://i.imgur.com/OmJpG0F.jpeg',
             (10000, 30): 'https://i.imgur.com/GmnnrJN.png',
             (10000, 14): 'https://i.imgur.com/GmnnrJN.png',
-            (10000, 7): 'https://i.imgur.com/GmnnrJN.png'
+            (10000, 7): 'https://i.imgur.com/VZI6vus.jpeg'
         }
 
         # 加载已发送的勳章列表
@@ -762,9 +762,9 @@ def check_and_send_badges():
         # 檢查並發送今天的勳章
         badges_today = []
         if total_steps >= 10000:
-            badges_today.append(("10000步勳章 連續1天", 'https://i.imgur.com/GmnnrJN.png'))
+            badges_today.append(("10000步勳章 連續1天", 'https://i.imgur.com/6PV8bUe.jpeg'))
         if total_steps >= 8000:
-            badges_today.append(("8000步勳章 連續1天", 'https://i.imgur.com/GmnnrJN.png'))
+            badges_today.append(("8000步勳章 連續1天", 'https://i.imgur.com/iOX39Qp.jpeg'))
         if total_steps >= 5000:
             badges_today.append(("5000步勳章 連續1天", 'https://i.imgur.com/1bQ0rHo.jpeg'))
         for badge, image_url in badges_today:
