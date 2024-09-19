@@ -1960,9 +1960,14 @@ def handle_postback(event):
         #colors = ['#cadff0', '#2050bc', '#fd7706']
         # colors = ['#cadff0', '#2050bc']
         colors = ['#60b8b3', '#437e7b']
-        pie_ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=colorstextprops={'fontproperties': font_prop})
-        # pie_ax.set_title('睡眠狀態', y=-0.1)
 
+        texts = pie_ax.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=colors)
+
+        # 應用 font_prop 到圓餅圖的標籤和百分比
+        for text in texts[1]:  # texts[1] 包含標籤
+            text.set_fontproperties(font_prop)
+        for text in texts[2]:  # texts[2] 包含百分比
+            text.set_fontproperties(font_prop)
 
         plt.tight_layout()
         plt.subplots_adjust(bottom=0.5)
