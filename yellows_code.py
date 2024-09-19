@@ -1949,7 +1949,7 @@ def handle_postback(event):
         legend_labels = ['淺眠', '深眠']
         legend_colors = [color_map[label] for label in legend_labels]
         legend_patches = [plt.Rectangle((0, 0), 1, 1, facecolor=color) for color in legend_colors]
-        plt.legend(legend_patches, legend_labels, loc='center left', bbox_to_anchor=(1, 0.5))
+        plt.legend(legend_patches, legend_labels, loc='center left', bbox_to_anchor=(1, 0.5), prop=font_prop)
 
         # 在右下角添加圓餅圖
         pie_ax = fig.add_axes([0.5, 0.05, 0.4, 0.4])  # [left, bottom, width, height]
