@@ -189,6 +189,10 @@ def handle_message(event):
     if event.message.text == "a":
         msg = (TextSendMessage(text='這是測試aaa'))
         line_bot_api.reply_message(event.reply_token, msg)
+    elif user_message == "1":
+        award_badge_manually(event)
+    elif user_message == "0":
+        remove_all_badges(event)
     elif event.message.text == '榮譽勳章':
         reply_message = TextSendMessage(
             text="請選擇你想查看的內容：",
@@ -551,15 +555,110 @@ def send_today_steps(event):
         
         total_steps = df_today['Step'].sum()
         
-        if total_steps >= 5000:
-            reply_text = f'今日步數：{total_steps} 步\n很棒！已達成每日基礎步數。'
+        # 設置步數百分比
+            if total_steps >= 8000:
+                percent = "100%"
+                progress_width = "100%"
+                status_message = "很棒！已達成每日基礎步數8000步。"
+            else:
+                percent = f"{min(total_steps / 8000 * 100, 99.9):.1f}%"
+                progress_width = f"{min(total_steps / 8000 * 100, 99.9):.1f}%"
+                steps_remaining = total_steps
+                status_message = f"已完成 {steps_remaining} / 8000步"
         else:
-            steps_to_5000 = 5000 - total_steps
-            reply_text = f'今日步數：{total_steps} 步\n還差 {steps_to_5000} 步達到5000步'
-        
+            percent = "0%"
+            progress_width = "0%"
+            status_message = "今日步數尚未紀錄"
+
+        # Flex Message 的內容
+        flex_message = {
+            "type": "carousel",
+            "contents": [
+                {
+                    "type": "bubble",
+                    "size": "kilo",
+                    "header": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "今日步數",
+                                "color": "#ffffff",
+                                "align": "start",
+                                "size": "3xl",
+                                "gravity": "center"
+                            },
+                            {
+                                "type": "text",
+                                "text": percent,
+                                "color": "#ffffff",
+                                "align": "start",
+                                "size": "xl",
+                                "gravity": "center",
+                                "margin": "sm"
+                            },
+                            {
+                                "type": "box",
+                                "layout": "vertical",
+                                "contents": [
+                                    {
+                                        "type": "box",
+                                        "layout": "vertical",
+                                        "contents": [
+                                            {
+                                                "type": "filler"
+                                            }
+                                        ],
+                                        "width": progress_width,
+                                        "backgroundColor": "#0D8186",
+                                        "height": "6px"
+                                    }
+                                ],
+                                "backgroundColor": "#9FD8E36E",
+                                "height": "6px",
+                                "margin": "sm"
+                            }
+                        ],
+                        "backgroundColor": "#27ACB2",
+                        "paddingTop": "19px",
+                        "paddingAll": "12px",
+                        "paddingBottom": "16px"
+                    },
+                    "body": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "box",
+                                "layout": "horizontal",
+                                "contents": [
+                                    {
+                                        "type": "text",
+                                        "text": status_message,
+                                        "color": "#8C8C8C",
+                                        "size": "sm",
+                                        "wrap": True
+                                    }
+                                ],
+                                "flex": 1
+                            }
+                        ],
+                        "spacing": "md",
+                        "paddingAll": "12px"
+                    },
+                    "styles": {
+                        "footer": {
+                            "separator": False
+                        }
+                    }
+                }
+            ]
+        }
+
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=reply_text)
+            FlexSendMessage(alt_text='步數狀況', contents=flex_message)
         )
     except Exception as e:
         error_message = f'處理數據時發生錯誤：{str(e)}'
