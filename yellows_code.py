@@ -864,20 +864,17 @@ def check_and_send_badges():
         # 讀取CSV文件創建DataFrame
         data = pd.read_csv('./dailyActivity.csv')
         df = pd.DataFrame(data)
-        
-        # 确保 'ActivityDate' 列是日期格式
+
+        # 確保 'ActivityDate' 列是日期格式
         df['ActivityDate'] = pd.to_datetime(df['ActivityDate'])
         df['Date'] = df['ActivityDate'].dt.date
         
-        # 按日期分组記算每天的步数總和
         df_daily = df.groupby('Date')['Step'].sum().reset_index()
         df_daily.set_index('Date', inplace=True)
 
-        #today = pd.to_datetime('today').normalize()
-        today = '2024-05-27'  # 用于測試
+        today = '2024-05-27'  # 用於測試
         today_date = pd.to_datetime(today).date()
 
-        # 定義不同天數和步數的勳章圖片
         badge_images = {
             (5000, 30): 'https://i.imgur.com/aV2wbmb.jpeg',
             (5000, 14): 'https://i.imgur.com/m2hIDkL.jpeg',
@@ -889,68 +886,59 @@ def check_and_send_badges():
             (10000, 14): 'https://i.imgur.com/GmnnrJN.png',
             (10000, 7): 'https://i.imgur.com/VZI6vus.jpeg'
         }
-
-        # 加载已发送的勳章列表
+        # 加載已發送的勳章列表
+        sent_badges = {}
         if os.path.exists('achieved_badges.txt'):
             with open('achieved_badges.txt', 'r') as file:
-                sent_badges = set(line.strip() for line in file.readlines())
-        else:
-            sent_badges = set()
-        
-        # Check for 7 consecutive days with less than 5000 steps
+                for line in file:
+                    parts = line.strip().split(',')
+                    if len(parts) == 2:  # 確保格式正確
+                        sent_badges[parts[0]] = pd.to_datetime(parts[1]).date()
+        # 檢查過去7天
         seven_days_ago = today_date - timedelta(days=7)
         df_last_seven_days = df_daily.loc[seven_days_ago:today_date]
 
-        if all(df_last_seven_days['Step'] < 5000) and df_daily.loc[today_date, 'Step'] >= 5000:
+        if all(df_last_seven_days['Step'] < 5000) and today_date in df_daily.index and df_daily.loc[today_date, 'Step'] >= 5000:
             welcome_back_image_url = 'https://i.imgur.com/4Jg0TSW.jpeg'
             line_bot_api.broadcast(TextSendMessage(text=f"歡迎回來！今天你已經達到{df_daily.loc[today_date, 'Step']}步！"))
             line_bot_api.broadcast(ImageSendMessage(original_content_url=welcome_back_image_url, preview_image_url=welcome_back_image_url))
 
-        # 保存已發送的勳章列表
-        sent_badges = set()
-
-        # 檢查過去30天、14天和7天的步数
-        for steps in [10000, 8000, 5000]:  # 先檢查10000步，再檢查8000步，最後檢查5000步
+        # 檢查過去30天、14天和7天的步數
+        for steps in [10000, 8000, 5000]:
             for days in [30, 14, 7]:
                 start_date = today_date - timedelta(days=days-1)
                 df_period = df_daily.loc[start_date:today_date]
 
-                # 確保在過去的 days 天内，每天步數至少為 steps
                 if len(df_period) == days and all(df_period['Step'] >= steps):
                     badge = f"{steps}步勳章 連續{days}天"
                     image_url = badge_images[(steps, days)]
 
-                    # 确保不重复发送相同勋章
+                    # 確保不重複發送相同勳章，並且未在今天發送過
                     if badge not in sent_badges:
-                        # 發送勳章信息和圖片
-                        line_bot_api.broadcast(TextSendMessage(text=f"恭喜！你已連續{days}天每天達到至少{steps}步，獲得{badge}！"))
                         line_bot_api.broadcast(ImageSendMessage(original_content_url=image_url, preview_image_url=image_url))
 
-                        # 紀錄達成的勳章
+                        # 紀錄達成的勳章和當前日期
                         with open('achieved_badges.txt', 'a') as file:
-                            file.write(f"{badge}\n")
+                            file.write(f"{badge},{today_date}\n")
 
-                        # 標記勳章已發送
-                        sent_badges.add(badge)
-        # 檢查今天的步数
-        total_steps = df_daily.loc[today_date, 'Step']
-        # 檢查並發送今天的勳章
-        badges_today = []
-        if total_steps >= 10000:
-            badges_today.append(("10000步勳章 連續1天", 'https://i.imgur.com/6PV8bUe.jpeg'))
-        if total_steps >= 8000:
-            badges_today.append(("8000步勳章 連續1天", 'https://i.imgur.com/iOX39Qp.jpeg'))
-        if total_steps >= 5000:
-            badges_today.append(("5000步勳章 連續1天", 'https://i.imgur.com/1bQ0rHo.jpeg'))
-        for badge, image_url in badges_today:
-            if badge not in sent_badges:
-                line_bot_api.broadcast(TextSendMessage(text=f"恭喜！你今天的步數已達到{total_steps}步，獲得{badge}！"))
-                line_bot_api.broadcast(ImageSendMessage(original_content_url=image_url, preview_image_url=image_url))
-                # 紀錄達成的勳章
-                with open('achieved_badges.txt', 'a') as file:
-                    file.write(f"{badge}\n")
-                # 標記勳章為已發送
-                sent_badges.add(badge)
+                        sent_badges[badge] = today_date
+        # 檢查今天的步數
+        if today_date in df_daily.index:
+            total_steps = df_daily.loc[today_date, 'Step']
+            badges_today = []
+            if total_steps >= 10000:
+                badges_today.append(("10000步勳章 連續1天", 'https://i.imgur.com/6PV8bUe.jpeg'))
+            if total_steps >= 8000:
+                badges_today.append(("8000步勳章 連續1天", 'https://i.imgur.com/iOX39Qp.jpeg'))
+            if total_steps >= 5000:
+                badges_today.append(("5000步勳章 連續1天", 'https://i.imgur.com/1bQ0rHo.jpeg'))
+            
+            for badge, image_url in badges_today:
+                if badge not in sent_badges:
+                    line_bot_api.broadcast(ImageSendMessage(original_content_url=image_url, preview_image_url=image_url))
+                    with open('achieved_badges.txt', 'a') as file:
+                        file.write(f"{badge},{today_date}\n")
+                    sent_badges[badge] = today_date
     except Exception as e:
         error_message = f'檢查勳章時發生錯誤：{str(e)}'
         print(error_message)
@@ -958,7 +946,7 @@ def check_and_send_badges():
             log_file.write(f"{pd.to_datetime('today')}: {error_message}\n")
 # 設定每天晚上10點檢查
 scheduler = BackgroundScheduler()
-scheduler.add_job(check_and_send_badges, 'cron', hour=22, minute=00)
+scheduler.add_job(check_and_send_badges, 'cron', hour=18, minute=12)
 scheduler.start()
 
 def send_scheduled_message(user_id):
