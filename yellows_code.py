@@ -551,11 +551,13 @@ def send_today_steps(event):
         
         #today = pd.to_datetime('today').normalize()
         today = '2024-05-27'
-        df_today = df.loc[today]
-        
-        total_steps = df_today['Step'].sum()
-        
-        # 設置步數百分比
+        if today in df.index:
+            df_today = df.loc[today]
+            
+            # 計算今天的步數總和
+            total_steps = df_today['Step'].sum()
+            
+            # 設置步數百分比
             if total_steps >= 8000:
                 percent = "100%"
                 progress_width = "100%"
@@ -660,6 +662,7 @@ def send_today_steps(event):
             event.reply_token,
             FlexSendMessage(alt_text='步數狀況', contents=flex_message)
         )
+
     except Exception as e:
         error_message = f'處理數據時發生錯誤：{str(e)}'
         line_bot_api.reply_message(
