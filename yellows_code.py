@@ -567,7 +567,6 @@ def send_today_steps(event):
             event.reply_token,
             TextSendMessage(text=error_message)
         )
-#已達成的勳章
 def send_achieved_badges(event):
     try:
         # 定義正則表達式來提取步數和連續天數
@@ -580,28 +579,102 @@ def send_achieved_badges(event):
             # 去除重複的勳章
             unique_badges = list(dict.fromkeys(achieved_badges))
 
-            # 提取步數和連續天數並排序
+            # 提取步數和連續天數並進行格式化
             badges_info = []
             for badge in unique_badges:
                 match = badge_pattern.search(badge)
                 if match:
                     steps = int(match.group(1))
                     days = int(match.group(2))
-                    badges_info.append((steps, days, badge.strip()))
+                    # 根據天數設定描述
+                    if days == 1:
+                        day_text = "第1天"
+                    else:
+                        day_text = f"連續{days}天"
+                    formatted_text = f"★{steps} ({day_text})"
+                    badges_info.append((steps, days, formatted_text))
+            
             # 根據步數和連續天數進行排序（升序）
             badges_info.sort(key=lambda x: (x[0], x[1]))
 
-            # 生成排序後的勳章文本
-            if badges_info:
-                achieved_badges_text = '\n'.join(badge for _, _, badge in badges_info)
+            # 生成勳章的內容區塊
+            badge_contents = []
+            for steps, days, badge_text in badges_info:
+                badge_contents.append({
+                    "type": "box",
+                    "layout": "horizontal",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": badge_text,
+                            "size": "lg",
+                            "color": "#000000",  # 勳章文字
+                            "wrap": True,
+                            "flex": 1
+                        }
+                    ],
+                    "margin": "sm"
+                })
+
+            # Flex Message JSON 結構
+            flex_message_content = {
+                "type": "bubble",
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "text",
+                            "text": "已達成的勳章" if badge_contents else "尚未達成任何勳章",
+                            "weight": "bold",
+                            "size": "xxl",
+                            "align": "center",
+                            "color": "#ffffff"
+                        }
+                    ],
+                    "backgroundColor": "#27ACB2" if badge_contents else "#FF0000"  # 有勳章為藍色，無勳章為紅色
+                },
+                "footer": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "spacing": "sm",
+                    "contents": badge_contents,  # 放入勳章內容
+                    "flex": 0
+                }
+            }
+
+            # 如果有已達成的勳章
+            if badge_contents:
+                flex_message = FlexSendMessage(alt_text="已達成的勳章", contents=flex_message_content)
             else:
-                achieved_badges_text = '尚未達成任何勳章。'
+                flex_message = FlexSendMessage(alt_text="尚未達成任何勳章", contents=flex_message_content)
         else:
-            achieved_badges_text = '尚未達成任何勳章。'
-        
+            # 如果檔案不存在
+            flex_message = FlexSendMessage(
+                alt_text="尚未達成任何勳章",
+                contents={
+                    "type": "bubble",
+                    "body": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "尚未達成任何勳章",
+                                "weight": "bold",
+                                "size": "xl",
+                                "align": "center",
+                                "color": "#ffffff"
+                            }
+                        ],
+                        "backgroundColor": "#FF0000"  # 如果沒有檔案，背景為紅色
+                    }
+                }
+            )
+
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=f"已達成的勳章：\n{achieved_badges_text}")
+            flex_message
         )
     except Exception as e:
         line_bot_api.reply_message(
