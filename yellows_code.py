@@ -946,7 +946,7 @@ def check_and_send_badges():
             log_file.write(f"{pd.to_datetime('today')}: {error_message}\n")
 # 設定每天晚上10點檢查
 scheduler = BackgroundScheduler()
-scheduler.add_job(check_and_send_badges, 'cron', hour=18, minute=12)
+scheduler.add_job(check_and_send_badges, 'cron', hour=18, minute=20)
 scheduler.start()
 
 def send_scheduled_message(user_id):
