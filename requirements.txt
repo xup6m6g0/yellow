@@ -7,3 +7,4 @@ apscheduler
 numpy
 schedule
 gunicorn
+psycopg2
